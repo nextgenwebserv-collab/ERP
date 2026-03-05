@@ -1,15 +1,15 @@
-import FormContainer from "@/components/FormContainer";
-import Pagination from "@/components/Pagination";
-import Table from "@/components/Table";
-import TableSearch from "@/components/TableSearch";
+import FormContainer from '@/components/FormContainer';
+import Pagination from '@/components/Pagination';
+import Table from '@/components/Table';
+import TableSearch from '@/components/TableSearch';
 
-import prisma from "@/lib/prisma";
-import { ITEM_PER_PAGE } from "@/lib/settings";
-import { Class, Prisma, Student } from "@prisma/client";
-import Image from "next/image";
-import Link from "next/link";
+import prisma from '@/lib/prisma';
+import { ITEM_PER_PAGE } from '@/lib/settings';
+import { Class, Prisma, Student } from '@prisma/client';
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { auth } from "@clerk/nextjs/server";
+import { auth } from '@clerk/nextjs/server';
 
 type StudentList = Student & { class: Class };
 
@@ -23,34 +23,34 @@ const StudentListPage = async ({
 
   const columns = [
     {
-      header: "Info",
-      accessor: "info",
+      header: 'Info',
+      accessor: 'info',
     },
     {
-      header: "Student ID",
-      accessor: "studentId",
-      className: "hidden md:table-cell",
+      header: 'Student ID',
+      accessor: 'studentId',
+      className: 'hidden md:table-cell',
     },
     {
-      header: "Grade",
-      accessor: "grade",
-      className: "hidden md:table-cell",
+      header: 'Grade',
+      accessor: 'grade',
+      className: 'hidden md:table-cell',
     },
     {
-      header: "Phone",
-      accessor: "phone",
-      className: "hidden lg:table-cell",
+      header: 'Phone',
+      accessor: 'phone',
+      className: 'hidden lg:table-cell',
     },
     {
-      header: "Address",
-      accessor: "address",
-      className: "hidden lg:table-cell",
+      header: 'Address',
+      accessor: 'address',
+      className: 'hidden lg:table-cell',
     },
-    ...(role === "admin"
+    ...(role === 'admin'
       ? [
           {
-            header: "Actions",
-            accessor: "action",
+            header: 'Actions',
+            accessor: 'action',
           },
         ]
       : []),
@@ -63,7 +63,7 @@ const StudentListPage = async ({
     >
       <td className="flex items-center gap-4 p-4">
         <Image
-          src={item.img || "/noAvatar.png"}
+          src={item.img || '/noAvatar.png'}
           alt=""
           width={40}
           height={40}
@@ -85,7 +85,7 @@ const StudentListPage = async ({
               <Image src="/view.png" alt="" width={16} height={16} />
             </button>
           </Link>
-          {role === "admin" && (
+          {role === 'admin' && (
             // <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurple">
             //   <Image src="/delete.png" alt="" width={16} height={16} />
             // </button>
@@ -108,7 +108,7 @@ const StudentListPage = async ({
     for (const [key, value] of Object.entries(queryParams)) {
       if (value !== undefined) {
         switch (key) {
-          case "teacherId":
+          case 'teacherId':
             query.class = {
               lessons: {
                 some: {
@@ -117,8 +117,8 @@ const StudentListPage = async ({
               },
             };
             break;
-          case "search":
-            query.name = { contains: value, mode: "insensitive" };
+          case 'search':
+            query.name = { contains: value, mode: 'insensitive' };
             break;
           default:
             break;
@@ -153,7 +153,7 @@ const StudentListPage = async ({
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === "admin" && (
+            {role === 'admin' && (
               // <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               //   <Image src="/plus.png" alt="" width={14} height={14} />
               // </button>

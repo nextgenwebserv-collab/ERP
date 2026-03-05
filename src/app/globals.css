@@ -5,7 +5,7 @@
 .react-calendar {
   width: 100% !important;
   border: none !important;
-  font-family: "Inter", sans-serif !important;
+  font-family: 'Inter', sans-serif !important;
 }
 
 .react-calendar__navigation__label__labelText {
@@ -102,7 +102,7 @@
   background-color: #fdf2fb !important;
 }
 
-.rbc-event-label{
+.rbc-event-label {
   color: gray !important;
   margin-bottom: 5px;
 }

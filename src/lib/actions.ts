@@ -1,28 +1,25 @@
-"use server";
+'use server';
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from 'next/cache';
 import {
   ClassSchema,
   ExamSchema,
   StudentSchema,
   SubjectSchema,
   TeacherSchema,
-} from "./formValidationSchemas";
-import prisma from "./prisma";
-import { clerkClient } from "@clerk/nextjs/server";
+} from './formValidationSchemas';
+import prisma from './prisma';
+import { clerkClient } from '@clerk/nextjs/server';
 
 type CurrentState = { success: boolean; error: boolean };
 
-export const createSubject = async (
-  currentState: CurrentState,
-  data: SubjectSchema
-) => {
+export const createSubject = async (currentState: CurrentState, data: SubjectSchema) => {
   try {
     await prisma.subject.create({
       data: {
         name: data.name,
         teachers: {
-          connect: data.teachers.map((teacherId) => ({ id: teacherId })),
+          connect: data.teachers.map(teacherId => ({ id: teacherId })),
         },
       },
     });
@@ -35,10 +32,7 @@ export const createSubject = async (
   }
 };
 
-export const updateSubject = async (
-  currentState: CurrentState,
-  data: SubjectSchema
-) => {
+export const updateSubject = async (currentState: CurrentState, data: SubjectSchema) => {
   try {
     await prisma.subject.update({
       where: {
@@ -47,7 +41,7 @@ export const updateSubject = async (
       data: {
         name: data.name,
         teachers: {
-          set: data.teachers.map((teacherId) => ({ id: teacherId })),
+          set: data.teachers.map(teacherId => ({ id: teacherId })),
         },
       },
     });
@@ -60,11 +54,8 @@ export const updateSubject = async (
   }
 };
 
-export const deleteSubject = async (
-  currentState: CurrentState,
-  data: FormData
-) => {
-  const id = data.get("id") as string;
+export const deleteSubject = async (currentState: CurrentState, data: FormData) => {
+  const id = data.get('id') as string;
   try {
     await prisma.subject.delete({
       where: {
@@ -80,10 +71,7 @@ export const deleteSubject = async (
   }
 };
 
-export const createClass = async (
-  currentState: CurrentState,
-  data: ClassSchema
-) => {
+export const createClass = async (currentState: CurrentState, data: ClassSchema) => {
   try {
     await prisma.class.create({
       data,
@@ -97,10 +85,7 @@ export const createClass = async (
   }
 };
 
-export const updateClass = async (
-  currentState: CurrentState,
-  data: ClassSchema
-) => {
+export const updateClass = async (currentState: CurrentState, data: ClassSchema) => {
   try {
     await prisma.class.update({
       where: {
@@ -117,11 +102,8 @@ export const updateClass = async (
   }
 };
 
-export const deleteClass = async (
-  currentState: CurrentState,
-  data: FormData
-) => {
-  const id = data.get("id") as string;
+export const deleteClass = async (currentState: CurrentState, data: FormData) => {
+  const id = data.get('id') as string;
   try {
     await prisma.class.delete({
       where: {
@@ -137,17 +119,16 @@ export const deleteClass = async (
   }
 };
 
-export const createTeacher = async (
-  currentState: CurrentState,
-  data: TeacherSchema
-) => {
+export const createTeacher = async (currentState: CurrentState, data: TeacherSchema) => {
   try {
-    const user = await (await clerkClient()).users.createUser({
+    const user = await (
+      await clerkClient()
+    ).users.createUser({
       username: data.username,
       password: data.password,
       firstName: data.name,
       lastName: data.surname,
-      publicMetadata:{role:"teacher"}
+      publicMetadata: { role: 'teacher' },
     });
 
     await prisma.teacher.create({
@@ -179,17 +160,16 @@ export const createTeacher = async (
   }
 };
 
-export const updateTeacher = async (
-  currentState: CurrentState,
-  data: TeacherSchema
-) => {
+export const updateTeacher = async (currentState: CurrentState, data: TeacherSchema) => {
   if (!data.id) {
     return { success: false, error: true };
   }
   try {
-    const user = await (await clerkClient()).users.updateUser(data.id, {
+    const user = await (
+      await clerkClient()
+    ).users.updateUser(data.id, {
       username: data.username,
-      ...(data.password !== "" && { password: data.password }),
+      ...(data.password !== '' && { password: data.password }),
       firstName: data.name,
       lastName: data.surname,
     });
@@ -199,7 +179,7 @@ export const updateTeacher = async (
         id: data.id,
       },
       data: {
-        ...(data.password !== "" && { password: data.password }),
+        ...(data.password !== '' && { password: data.password }),
         username: data.username,
         name: data.name,
         surname: data.surname,
@@ -225,11 +205,8 @@ export const updateTeacher = async (
   }
 };
 
-export const deleteTeacher = async (
-  currentState: CurrentState,
-  data: FormData
-) => {
-  const id = data.get("id") as string;
+export const deleteTeacher = async (currentState: CurrentState, data: FormData) => {
+  const id = data.get('id') as string;
   try {
     await (await clerkClient()).users.deleteUser(id);
 
@@ -247,10 +224,7 @@ export const deleteTeacher = async (
   }
 };
 
-export const createStudent = async (
-  currentState: CurrentState,
-  data: StudentSchema
-) => {
+export const createStudent = async (currentState: CurrentState, data: StudentSchema) => {
   console.log(data);
   try {
     const classItem = await prisma.class.findUnique({
@@ -262,12 +236,14 @@ export const createStudent = async (
       return { success: false, error: true };
     }
 
-    const user = await (await clerkClient()).users.createUser({
+    const user = await (
+      await clerkClient()
+    ).users.createUser({
       username: data.username,
       password: data.password,
       firstName: data.name,
       lastName: data.surname,
-      publicMetadata:{role:"student"}
+      publicMetadata: { role: 'student' },
     });
 
     await prisma.student.create({
@@ -297,17 +273,16 @@ export const createStudent = async (
   }
 };
 
-export const updateStudent = async (
-  currentState: CurrentState,
-  data: StudentSchema
-) => {
+export const updateStudent = async (currentState: CurrentState, data: StudentSchema) => {
   if (!data.id) {
     return { success: false, error: true };
   }
   try {
-    const user = await (await clerkClient()).users.updateUser(data.id, {
+    const user = await (
+      await clerkClient()
+    ).users.updateUser(data.id, {
       username: data.username,
-      ...(data.password !== "" && { password: data.password }),
+      ...(data.password !== '' && { password: data.password }),
       firstName: data.name,
       lastName: data.surname,
     });
@@ -317,7 +292,7 @@ export const updateStudent = async (
         id: data.id,
       },
       data: {
-        ...(data.password !== "" && { password: data.password }),
+        ...(data.password !== '' && { password: data.password }),
         username: data.username,
         name: data.name,
         surname: data.surname,
@@ -341,11 +316,8 @@ export const updateStudent = async (
   }
 };
 
-export const deleteStudent = async (
-  currentState: CurrentState,
-  data: FormData
-) => {
-  const id = data.get("id") as string;
+export const deleteStudent = async (currentState: CurrentState, data: FormData) => {
+  const id = data.get('id') as string;
   try {
     await (await clerkClient()).users.deleteUser(id);
 
@@ -363,10 +335,7 @@ export const deleteStudent = async (
   }
 };
 
-export const createExam = async (
-  currentState: CurrentState,
-  data: ExamSchema
-) => {
+export const createExam = async (currentState: CurrentState, data: ExamSchema) => {
   // const { userId, sessionClaims } = auth();
   // const role = (sessionClaims?.metadata as { role?: string })?.role;
 
@@ -401,10 +370,7 @@ export const createExam = async (
   }
 };
 
-export const updateExam = async (
-  currentState: CurrentState,
-  data: ExamSchema
-) => {
+export const updateExam = async (currentState: CurrentState, data: ExamSchema) => {
   // const { userId, sessionClaims } = auth();
   // const role = (sessionClaims?.metadata as { role?: string })?.role;
 
@@ -442,11 +408,8 @@ export const updateExam = async (
   }
 };
 
-export const deleteExam = async (
-  currentState: CurrentState,
-  data: FormData
-) => {
-  const id = data.get("id") as string;
+export const deleteExam = async (currentState: CurrentState, data: FormData) => {
+  const id = data.get('id') as string;
 
   // const { userId, sessionClaims } = auth();
   // const role = (sessionClaims?.metadata as { role?: string })?.role;

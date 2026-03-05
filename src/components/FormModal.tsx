@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   deleteClass,
@@ -6,14 +6,14 @@ import {
   deleteStudent,
   deleteSubject,
   deleteTeacher,
-} from "@/lib/actions";
-import dynamic from "next/dynamic";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useFormState } from "react-dom";
-import { toast } from "react-toastify";
-import { FormContainerProps } from "./FormContainer";
+} from '@/lib/actions';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useFormState } from 'react-dom';
+import { toast } from 'react-toastify';
+import { FormContainerProps } from './FormContainer';
 
 const deleteActionMap = {
   subject: deleteSubject,
@@ -21,7 +21,7 @@ const deleteActionMap = {
   teacher: deleteTeacher,
   student: deleteStudent,
   exam: deleteExam,
-// TODO: OTHER DELETE ACTIONS
+  // TODO: OTHER DELETE ACTIONS
   parent: deleteSubject,
   lesson: deleteSubject,
   assignment: deleteSubject,
@@ -36,19 +36,19 @@ const deleteActionMap = {
 // import TeacherForm from "./forms/TeacherForm";
 // import StudentForm from "./forms/StudentForm";
 
-const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
+const TeacherForm = dynamic(() => import('./forms/TeacherForm'), {
   loading: () => <h1>Loading...</h1>,
 });
-const StudentForm = dynamic(() => import("./forms/StudentForm"), {
+const StudentForm = dynamic(() => import('./forms/StudentForm'), {
   loading: () => <h1>Loading...</h1>,
 });
-const SubjectForm = dynamic(() => import("./forms/SubjectForm"), {
+const SubjectForm = dynamic(() => import('./forms/SubjectForm'), {
   loading: () => <h1>Loading...</h1>,
 });
-const ClassForm = dynamic(() => import("./forms/ClassForm"), {
+const ClassForm = dynamic(() => import('./forms/ClassForm'), {
   loading: () => <h1>Loading...</h1>,
 });
-const ExamForm = dynamic(() => import("./forms/ExamForm"), {
+const ExamForm = dynamic(() => import('./forms/ExamForm'), {
   loading: () => <h1>Loading...</h1>,
 });
 // TODO: OTHER FORMS
@@ -56,50 +56,25 @@ const ExamForm = dynamic(() => import("./forms/ExamForm"), {
 const forms: {
   [key: string]: (
     setOpen: Dispatch<SetStateAction<boolean>>,
-    type: "create" | "update",
+    type: 'create' | 'update',
     data?: any,
     relatedData?: any
   ) => JSX.Element;
 } = {
   subject: (setOpen, type, data, relatedData) => (
-    <SubjectForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
+    <SubjectForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
   ),
   class: (setOpen, type, data, relatedData) => (
-    <ClassForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
+    <ClassForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
   ),
   teacher: (setOpen, type, data, relatedData) => (
-    <TeacherForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
+    <TeacherForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
   ),
   student: (setOpen, type, data, relatedData) => (
-    <StudentForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
+    <StudentForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
   ),
   exam: (setOpen, type, data, relatedData) => (
-    <ExamForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
+    <ExamForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
     // TODO OTHER LIST ITEMS
   ),
 };
@@ -111,13 +86,9 @@ const FormModal = ({
   id,
   relatedData,
 }: FormContainerProps & { relatedData?: any }) => {
-  const size = type === "create" ? "w-8 h-8" : "w-7 h-7";
+  const size = type === 'create' ? 'w-8 h-8' : 'w-7 h-7';
   const bgColor =
-    type === "create"
-      ? "bg-lamaYellow"
-      : type === "update"
-      ? "bg-lamaSky"
-      : "bg-lamaPurple";
+    type === 'create' ? 'bg-lamaYellow' : type === 'update' ? 'bg-lamaSky' : 'bg-lamaPurple';
 
   const [open, setOpen] = useState(false);
 
@@ -137,7 +108,7 @@ const FormModal = ({
       }
     }, [state, router]);
 
-    return type === "delete" && id ? (
+    return type === 'delete' && id ? (
       <form action={formAction} className="p-4 flex flex-col gap-4">
         <input type="text | number" name="id" value={id} hidden />
         <span className="text-center font-medium">
@@ -147,10 +118,10 @@ const FormModal = ({
           Delete
         </button>
       </form>
-    ) : type === "create" || type === "update" ? (
+    ) : type === 'create' || type === 'update' ? (
       forms[table](setOpen, type, data, relatedData)
     ) : (
-      "Form not found!"
+      'Form not found!'
     );
   };
 
@@ -166,10 +137,7 @@ const FormModal = ({
         <div className="w-screen h-screen absolute left-0 top-0 bg-black bg-opacity-60 z-50 flex items-center justify-center">
           <div className="bg-white p-4 rounded-md relative w-[90%] md:w-[70%] lg:w-[60%] xl:w-[50%] 2xl:w-[40%]">
             <Form />
-            <div
-              className="absolute top-4 right-4 cursor-pointer"
-              onClick={() => setOpen(false)}
-            >
+            <div className="absolute top-4 right-4 cursor-pointer" onClick={() => setOpen(false)}>
               <Image src="/close.png" alt="" width={14} height={14} />
             </div>
           </div>
