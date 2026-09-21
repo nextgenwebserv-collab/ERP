@@ -5,7 +5,7 @@ import EventList from './EventList';
 const EventCalendarContainer = async ({
   searchParams,
 }: {
-  searchParams: { [keys: string]: string | undefined };
+  searchParams: Promise<{ [keys: string]: string | undefined }>;
 }) => {
   const { date } = await searchParams;
   return (
