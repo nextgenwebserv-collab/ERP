@@ -1,4 +1,4 @@
-﻿import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { routeAccessMap } from './lib/settings';
 import { NextResponse } from 'next/server';
 
