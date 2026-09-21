@@ -1,14 +1,26 @@
-FROM node:20-bookworm-slim
+# Use Node.js as the base image
+FROM node:18
 
+# Set the working directory inside the container
 WORKDIR /app
 
-RUN corepack enable
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+# Copy package.json and package-lock.json files
+COPY package*.json ./
 
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code
 COPY . .
-RUN pnpm prisma generate
-RUN pnpm build
 
+# Generate Database
+RUN npx prisma migrate dev --name init
+
+# Build the Next.js application
+RUN npm run build
+
+# Expose the port the app runs on
 EXPOSE 3000
-CMD ["sh", "-c", "pnpm prisma migrate deploy && pnpm start"]
+
+# Start the Next.js application
+CMD ["npm", "start"]
